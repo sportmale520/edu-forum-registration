@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>台中市教育論壇 - AI教育報名系統</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            width: 100%;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>台中市教育論壇 - AI教育報名</h1>
+        <form id="registrationForm" onsubmit="submitForm(event)">
+            <label for="name">姓名 *</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">電子郵件 *</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="phone">連絡電話 *</label>
+            <input type="tel" id="phone" name="phone" required>
+
+            <label for="organization">所屬單位/學校</label>
+            <input type="text" id="organization" name="organization">
+
+            <label for="role">身份 *</label>
+            <select id="role" name="role" required>
+                <option value="">請選擇</option>
+                <option value="教師">教師</option>
+                <option value="學生">學生</option>
+                <option value="教育行政人員">教育行政人員</option>
+                <option value="業界人士">業界人士</option>
+                <option value="其他">其他</option>
+            </select>
+
+            <label for="session">欲參加場次 *</label>
+            <select id="session" name="session" required>
+                <option value="">請選擇</option>
+                <option value="專題演講">專題演講</option>
+                <option value="座談會">座談會</option>
+                <option value="工作坊">工作坊</option>
+                <option value="全程參與">全程參與</option>
+            </select>
+
+            <label for="comments">備註</label>
+            <textarea id="comments" name="comments" rows="4"></textarea>
+
+            <button type="submit">提交報名</button>
+        </form>
+    </div>
+
+    <script>
+        function submitForm(event) {
+            event.preventDefault();
+            const formData = new FormData(document.getElementById('registrationForm'));
+            const data = Object.fromEntries(formData);
+            
+            // 這裡假設後端處理資料並寄送
+            fetch('YOUR_BACKEND_URL', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert('報名成功！感謝您的參與。');
+                document.getElementById('registrationForm').reset();
+            })
+            .catch(error => alert('報名失敗，請稍後再試。'));
+        }
+    </script>
+</body>
+</html>
