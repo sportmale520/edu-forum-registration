@@ -52,7 +52,7 @@
 <body>
     <div class="container">
         <h1>台中市教育論壇 - AI教育報名</h1>
-        <form id="registrationForm" onsubmit="submitForm(event)">
+        <form id="registrationForm">
             <label for="name">姓名 *</label>
             <input type="text" id="name" name="name" required>
 
@@ -92,55 +92,47 @@
     </div>
 
     <script>
-        function submitForm(event) {
+        document.getElementById("registrationForm").addEventListener("submit", async function(event) {
             event.preventDefault();
-            const formData = new FormData(document.getElementById('registrationForm'));
-            const data = Object.fromEntries(formData);
-            
-            // 這裡假設後端處理資料並寄送
-            
-async function submitForm(event) {
-  event.preventDefault();
 
-  const formData = new FormData(document.getElementById("myForm"));
-  const jsonData = Object.fromEntries(formData.entries());
+            const formData = {
+                name: document.getElementById("name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                organization: document.getElementById("organization").value,
+                role: document.getElementById("role").value,
+                session: document.getElementById("session").value,
+                comments: document.getElementById("comments").value
+            };
 
-  try {
-    let response = await fetch("https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    name: document.querySelector("input[name='name']").value,
-    email: document.querySelector("input[name='email']").value,
-    phone: document.querySelector("input[name='phone']").value,
-    organization: document.querySelector("input[name='organization']").value,
-    role: document.querySelector("select[name='role']").value,
-    session: document.querySelector("select[name='session']").value,
-    comments: document.querySelector("textarea[name='comments']").value
-  })
-})
-.then(response => response.text())  // 先讀取純文字，檢查是否為空
-.then(text => {
-  console.log("伺服器回應:", text);
-  if (!text) throw new Error("伺服器回應為空");
-  
-  return JSON.parse(text);  // 轉換為 JSON
-})
-.then(data => {
-  console.log("解析後的 JSON:", data);
-  if (data.status === "success") {
-    alert("報名成功！");
-  } else {
-    alert("錯誤：" + data.message);
-  }
-})
-.catch(error => console.error("請求錯誤:", error));
+            console.log("提交的資料：", formData);
 
-  }
-}
+            try {
+                let response = await fetch("https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
 
+                let text = await response.text();
+                console.log("伺服器回應:", text);
+
+                if (!text) throw new Error("伺服器回應為空");
+
+                let data = JSON.parse(text);
+                console.log("解析後的 JSON:", data);
+
+                if (data.status === "success") {
+                    alert("報名成功！");
+                    document.getElementById("registrationForm").reset(); // 清空表單
+                } else {
+                    alert("錯誤：" + data.message);
+                }
+            } catch (error) {
+                console.error("請求錯誤:", error);
+                alert("報名失敗，請稍後再試！");
+            }
+        });
     </script>
 </body>
 </html>
