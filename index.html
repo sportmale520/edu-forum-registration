@@ -98,17 +98,24 @@
             const data = Object.fromEntries(formData);
             
             // 這裡假設後端處理資料並寄送
-            fetch('https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(result => {
-                alert('報名成功！感謝您的參與。');
-                document.getElementById('registrationForm').reset();
-            })
-            .catch(error => alert('報名失敗，請稍後再試。'));
+            
+fetch('https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+})
+.then(response => response.json())
+.then(result => {
+    console.log('Result:', result);
+    alert('報名成功！感謝您的參與。');
+    document.getElementById('registrationForm').reset();
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('報名失敗，請稍後再試。');
+});
+
+
         }
     </script>
 </body>
