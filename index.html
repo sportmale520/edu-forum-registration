@@ -99,24 +99,36 @@
             
             // 這裡假設後端處理資料並寄送
             
-fetch('https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-})
-.then(response => response.json())
-.then(result => {
-    console.log('Result:', result);
-    alert('報名成功！感謝您的參與。');
-    document.getElementById('registrationForm').reset();
-})
-.catch(error => {
-    console.error('Error:', error);
-    alert('報名失敗，請稍後再試。');
-});
+async function submitForm(event) {
+  event.preventDefault();
 
+  const formData = new FormData(document.getElementById("myForm"));
+  const jsonData = Object.fromEntries(formData.entries());
 
-        }
+  try {
+    let response = await fetch("https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(jsonData),
+      mode: "cors" // ✅ 允許跨來源請求
+    });
+
+    let result = await response.json();
+    console.log(result);
+    
+    if (result.status === "success") {
+      alert("報名成功！");
+    } else {
+      alert("報名失敗：" + result.message);
+    }
+  } catch (error) {
+    console.error("錯誤:", error);
+    alert("提交時發生錯誤，請稍後再試！");
+  }
+}
+
     </script>
 </body>
 </html>
