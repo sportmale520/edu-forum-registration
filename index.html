@@ -107,25 +107,37 @@ async function submitForm(event) {
 
   try {
     let response = await fetch("https://script.google.com/macros/s/AKfycbwQ2MOd5IVbRs2rtrnO9gybt3j545JyTAEDVcyIshHyYf_mHBBOuXbhBAq3rTYSDiN_/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(jsonData),
-      mode: "cors" // ✅ 允許跨來源請求
-    });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    name: document.querySelector("input[name='name']").value,
+    email: document.querySelector("input[name='email']").value,
+    phone: document.querySelector("input[name='phone']").value,
+    organization: document.querySelector("input[name='organization']").value,
+    role: document.querySelector("select[name='role']").value,
+    session: document.querySelector("select[name='session']").value,
+    comments: document.querySelector("textarea[name='comments']").value
+  })
+})
+.then(response => response.text())  // 先讀取純文字，檢查是否為空
+.then(text => {
+  console.log("伺服器回應:", text);
+  if (!text) throw new Error("伺服器回應為空");
+  
+  return JSON.parse(text);  // 轉換為 JSON
+})
+.then(data => {
+  console.log("解析後的 JSON:", data);
+  if (data.status === "success") {
+    alert("報名成功！");
+  } else {
+    alert("錯誤：" + data.message);
+  }
+})
+.catch(error => console.error("請求錯誤:", error));
 
-    let result = await response.json();
-    console.log(result);
-    
-    if (result.status === "success") {
-      alert("報名成功！");
-    } else {
-      alert("報名失敗：" + result.message);
-    }
-  } catch (error) {
-    console.error("錯誤:", error);
-    alert("提交時發生錯誤，請稍後再試！");
   }
 }
 
