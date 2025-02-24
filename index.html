@@ -129,8 +129,13 @@
                     alert("錯誤：" + data.message);
                 }
             } catch (error) {
-                console.error("請求錯誤:", error);
-                alert("報名失敗，請稍後再試！");
+                // 錯誤處理程式碼
+                console.error("發生錯誤：", error);
+                alert("發生錯誤，請稍後再試。");
+            }
+            } finally {
+               // 無論是否發生錯誤都會執行的程式碼
+                console.log("程式碼執行完畢。");
             }
         });
     </script>
